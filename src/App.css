@@ -1,0 +1,14 @@
+.components {
+  max-width: 1800px;
+  margin: 0 auto;
+}
+
+.main {
+  margin-top: 50px;
+  padding: 0 20px 50px;
+}
+
+.skeleton {
+  margin-left: 20px;
+  margin-right: 20px;
+}

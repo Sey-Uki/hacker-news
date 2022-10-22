@@ -5,6 +5,7 @@ import { Skeleton } from "antd";
 import { LikeOutlined, MessageOutlined } from "@ant-design/icons";
 import { List, Space } from "antd";
 import React from "react";
+import { Link } from "react-router-dom";
 
 const IconText = ({ icon, text }: { icon: React.FC; text: string }) => (
   <Space>
@@ -65,7 +66,7 @@ export const Main = () => {
               ]}
             >
               <List.Item.Meta
-                title={<a href={item.url}>{item.title}</a>}
+                title={<Link to={`/${item.id}`}>{item.title}</Link>}
                 description={item.by}
               />
               {getPublishDate(item.time)}

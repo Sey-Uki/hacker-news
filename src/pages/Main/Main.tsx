@@ -30,8 +30,8 @@ export const Main = () => {
     );
   });
 
-  const getPublishDate = (item: number) => {
-    const dateTimeStr = new Date(item * 1000).toLocaleString();
+  const getPublishDate = (time: number) => {
+    const dateTimeStr = new Date(time * 1000).toLocaleString();
     const result = dateTimeStr;
     return result;
   };
@@ -67,7 +67,7 @@ export const Main = () => {
             >
               <List.Item.Meta
                 title={<Link to={`/${item.id}`}>{item.title}</Link>}
-                description={item.by}
+                description={`Автор: ${item.by}`}
               />
               {getPublishDate(item.time)}
             </List.Item>

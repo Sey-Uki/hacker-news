@@ -10,7 +10,7 @@ export const AppRoutes = () => {
         <Route exact path="/">
           <Main />
         </Route>
-        <Route exact path="/:id">
+        <Route exact path="/:newsId">
           <News />
         </Route>
       </Switch>

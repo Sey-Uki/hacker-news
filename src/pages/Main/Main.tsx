@@ -6,6 +6,7 @@ import { LikeOutlined, MessageOutlined } from "@ant-design/icons";
 import { List, Space } from "antd";
 import React from "react";
 import { Link } from "react-router-dom";
+import { getPublishDate } from "../../helpers/getPublishDate";
 
 const IconText = ({ icon, text }: { icon: React.FC; text: string }) => (
   <Space>
@@ -29,12 +30,6 @@ export const Main = () => {
       </div>
     );
   });
-
-  const getPublishDate = (time: number) => {
-    const dateTimeStr = new Date(time * 1000).toLocaleString();
-    const result = dateTimeStr;
-    return result;
-  };
 
   return (
     <div className="main">

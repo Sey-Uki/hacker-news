@@ -1,4 +1,4 @@
-.components {
+.App {
   max-width: 1800px;
   margin: 0 auto;
 }
@@ -11,11 +11,10 @@
   padding: 0 20px 50px;
 }
 
-.skeleton {
-  margin-left: 20px;
-  margin-right: 20px;
-}
-
 .deleteComment {
   color: #787878;
+}
+
+h1.ant-typography {
+  margin: 0;
 }

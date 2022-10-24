@@ -1,0 +1,25 @@
+.newsHeader a {
+  margin-right: 15px;
+}
+
+.top {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.top a {
+  font-size: 22px;
+}
+
+.top>div {
+  display: flex;
+  align-items: center;
+}
+
+.bottom {
+  display: flex;
+  flex-direction: column;
+  margin-left: 37px;
+  margin-top: 10px;
+}

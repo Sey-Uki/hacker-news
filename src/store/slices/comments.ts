@@ -1,5 +1,4 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
-import { RootState } from "..";
 
 export type CommentItem = {
   id: number;
@@ -10,14 +9,6 @@ export type CommentItem = {
   kids?: number[];
   parent: number;
   deleted?: boolean;
-};
-
-type CommentsState = {
-  listOfComments: CommentItem[];
-};
-
-const initialState: CommentsState = {
-  listOfComments: [],
 };
 
 export const getComments = createAsyncThunk<CommentItem[], number[]>(
@@ -40,16 +31,8 @@ export const getComments = createAsyncThunk<CommentItem[], number[]>(
 
 export const comments = createSlice({
   name: "comments",
-  initialState,
+  initialState: {},
   reducers: {},
-  extraReducers: (builder) => {
-    builder.addCase(getComments.fulfilled, (state, action) => {
-      state.listOfComments = action.payload;
-    });
-  },
 });
-
-export const selectComments = (state: RootState) =>
-  state.comments.listOfComments;
 
 export const commentsReducer = comments.reducer;

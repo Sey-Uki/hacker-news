@@ -9,7 +9,7 @@ export type NewsItem = {
   descendants?: number;
   id: number;
   kids?: number[];
-  score?: number;
+  score: number;
   time: number;
   title?: string;
   type: string;
@@ -19,13 +19,11 @@ export type NewsItem = {
 type NewsState = {
   newsIds: number[];
   listOfNews: NewsItem[];
-  singleNews: NewsItem | null;
 };
 
 const initialState: NewsState = {
   newsIds: [],
   listOfNews: [],
-  singleNews: null,
 };
 
 export const getNewsIds = createAsyncThunk<number[]>(
@@ -83,14 +81,10 @@ export const news = createSlice({
     builder.addCase(getNews.fulfilled, (state, action) => {
       state.listOfNews = action.payload;
     });
-    builder.addCase(getSingleNews.fulfilled, (state, action) => {
-      state.singleNews = action.payload;
-    });
   },
 });
 
 export const selectNews = (state: RootState) => state.news.listOfNews;
-export const selectSingleNews = (state: RootState) => state.news.singleNews;
 export const selectNewsIds = (state: RootState) => state.news.newsIds;
 
 export const newsReducer = news.reducer;

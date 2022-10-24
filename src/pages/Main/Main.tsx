@@ -1,12 +1,20 @@
-import { useEffect, useState } from "react";
-import { getNews, NewsItem, selectNews } from "../../store/slices/news";
+import { useEffect, useState, useCallback } from "react";
+import {
+  getNews,
+  getNewsIds,
+  NewsItem,
+  selectNews,
+  selectNewsIds,
+} from "../../store/slices/news";
 import { useAppDispatch, useAppSelector } from "../../store";
-import { Button, Skeleton, Spin } from "antd";
+import { Button, Pagination, Skeleton, Spin } from "antd";
 import { LikeOutlined, MessageOutlined } from "@ant-design/icons";
 import { List, Space } from "antd";
 import React from "react";
-import { Link } from "react-router-dom";
+import { Link, useHistory } from "react-router-dom";
 import { getPublishDate } from "../../helpers/getPublishDate";
+
+const NEWS_PER_PAGE = 5;
 
 const IconText = ({ icon, text }: { icon: React.FC; text: string }) => (
   <Space>
@@ -17,26 +25,45 @@ const IconText = ({ icon, text }: { icon: React.FC; text: string }) => (
 
 export const Main = () => {
   const news = useAppSelector(selectNews);
+  const newsIds = useAppSelector(selectNewsIds);
   const dispatch = useAppDispatch();
+  const history = useHistory();
 
   const [isLoading, setIsLoading] = useState(false);
-
-  const fetchNews = () => {
-    setIsLoading(true);
-    dispatch(getNews()).finally(() => setIsLoading(false));
-  };
+  const [pageNumber, setPageNumber] = useState(
+    Number(localStorage.getItem("pageNumber")) || 1
+  );
 
   useEffect(() => {
+    if (newsIds.length) return;
+
+    dispatch(getNewsIds());
+  }, [dispatch, newsIds.length]);
+
+  const fetchNews = useCallback(() => {
     setIsLoading(true);
 
-    dispatch(getNews()).finally(() => setIsLoading(false));
+    dispatch(getNewsIds()).finally(() => setIsLoading(false));
   }, [dispatch]);
 
   useEffect(() => {
-    setInterval(() => dispatch(getNews()), 60000);
-  }, [dispatch]);
+    if (!newsIds.length) return;
 
-  const skeletons = Array.from(new Array(5)).map((_, i) => {
+    setIsLoading(true);
+    dispatch(getNews({ newsIds, pageNumber })).finally(() =>
+      setIsLoading(false)
+    );
+  }, [dispatch, fetchNews, newsIds, pageNumber]);
+
+  useEffect(() => {
+    if (!newsIds.length) return;
+
+    history.push(`/?page=${pageNumber}`);
+
+    setInterval(() => dispatch(getNews({ newsIds, pageNumber })), 60000);
+  }, [dispatch, history, newsIds, pageNumber]);
+
+  const skeletons = Array.from(new Array(NEWS_PER_PAGE)).map((_, i) => {
     return (
       <div key={i} className="skeleton">
         <Skeleton active />
@@ -57,12 +84,6 @@ export const Main = () => {
             <List
               itemLayout="vertical"
               size="large"
-              pagination={{
-                onChange: (page) => {
-                  console.log(page);
-                },
-                pageSize: 5,
-              }}
               dataSource={news}
               renderItem={(item: NewsItem) => (
                 <List.Item
@@ -89,6 +110,17 @@ export const Main = () => {
               )}
             />
           )}
+
+          <Pagination
+            onChange={(page) => {
+              setPageNumber(page);
+              localStorage.setItem("pageNumber", String(page));
+            }}
+            total={newsIds.length}
+            current={pageNumber}
+            pageSizeOptions={[]}
+            defaultPageSize={5}
+          />
         </>
       ) : (
         skeletons

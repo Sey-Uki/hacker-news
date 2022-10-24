@@ -17,23 +17,35 @@ export type NewsItem = {
 };
 
 type NewsState = {
+  newsIds: number[];
   listOfNews: NewsItem[];
   singleNews: NewsItem | null;
 };
 
 const initialState: NewsState = {
+  newsIds: [],
   listOfNews: [],
   singleNews: null,
 };
 
-export const getNews = createAsyncThunk<NewsItem[]>(
-  "news/getNews",
+export const getNewsIds = createAsyncThunk<number[]>(
+  "news/getNewsIds",
   async () => {
     const response = await fetch(URL);
-    const listOfIds = await response.json();
+    const result = await response.json() as number[];
+    return result.slice(1, 101);
+  }
+);
 
-    const promises = listOfIds
-      .slice(470, 480)
+export const getNews = createAsyncThunk<NewsItem[], { newsIds: number[], pageNumber: number }>(
+  "news/getNews",
+  async ({ newsIds, pageNumber }) => {
+
+    const from = pageNumber * 5 - 5;
+    const to = pageNumber * 5;
+
+    const promises = newsIds
+      .slice(from, to)
       .map((id: number) =>
         fetch(
           `https://hacker-news.firebaseio.com/v0/item/${id}.json?print=pretty`
@@ -65,6 +77,9 @@ export const news = createSlice({
   initialState,
   reducers: {},
   extraReducers: (builder) => {
+    builder.addCase(getNewsIds.fulfilled, (state, action) => {
+      state.newsIds = action.payload;
+    });
     builder.addCase(getNews.fulfilled, (state, action) => {
       state.listOfNews = action.payload;
     });
@@ -76,5 +91,6 @@ export const news = createSlice({
 
 export const selectNews = (state: RootState) => state.news.listOfNews;
 export const selectSingleNews = (state: RootState) => state.news.singleNews;
+export const selectNewsIds = (state: RootState) => state.news.newsIds;
 
 export const newsReducer = news.reducer;

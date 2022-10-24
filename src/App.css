@@ -5,16 +5,17 @@
 
 .main,
 .news {
-  margin-top: 50px;
-  padding: 0 20px 50px;
-}
-
-.news {
   display: flex;
   flex-direction: column;
+  margin-top: 50px;
+  padding: 0 20px 50px;
 }
 
 .skeleton {
   margin-left: 20px;
   margin-right: 20px;
+}
+
+.deleteComment {
+  color: #787878;
 }

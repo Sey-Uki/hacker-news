@@ -5,13 +5,13 @@ const URL =
   "https://hacker-news.firebaseio.com/v0/newstories.json?print=pretty";
 
 export type NewsItem = {
-  by: string;
-  descendants: number;
+  by?: string;
+  descendants?: number;
   id: number;
   kids?: number[];
-  score: number;
+  score?: number;
   time: number;
-  title: string;
+  title?: string;
   type: string;
   url: string;
 };

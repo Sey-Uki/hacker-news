@@ -2,12 +2,14 @@ import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import { RootState } from "..";
 
 export type CommentItem = {
-  by: string;
   id: number;
-  kids?: number[];
-  parent?: number;
   time: number;
-  text: string;
+  type: string;
+  text?: string;
+  by?: string;
+  kids?: number[];
+  parent: number;
+  deleted?: boolean;
 };
 
 type CommentsState = {
@@ -18,7 +20,7 @@ const initialState: CommentsState = {
   listOfComments: [],
 };
 
-export const getComment = createAsyncThunk<CommentItem[], number[]>(
+export const getComments = createAsyncThunk<CommentItem[], number[]>(
   "news/getComment",
   async (idsOfComments) => {
     const promises = idsOfComments.map((id: number) =>
@@ -32,7 +34,7 @@ export const getComment = createAsyncThunk<CommentItem[], number[]>(
       comments.map(async (item) => await item.json())
     );
 
-    return resolvedComments;
+    return resolvedComments as CommentItem[];
   }
 );
 
@@ -41,7 +43,7 @@ export const comments = createSlice({
   initialState,
   reducers: {},
   extraReducers: (builder) => {
-    builder.addCase(getComment.fulfilled, (state, action) => {
+    builder.addCase(getComments.fulfilled, (state, action) => {
       state.listOfComments = action.payload;
     });
   },
